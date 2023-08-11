@@ -95,11 +95,11 @@
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 $(document).ready(function() {
     var myChart; 
+
 
     $(".item").click(function() {
         var id = $(this).data('id');
@@ -119,7 +119,7 @@ $(document).ready(function() {
                 const chartData = {
                     labels: labels,
                     datasets: [{
-                        label: 'Rekapan Kehadiran Mahasiswa',
+                        label: 'Kehadiran Mahasiswa T.A '+ data.ta,
                         data: [data.hadir, data.izin, data.sakit, data.alfa],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',

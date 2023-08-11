@@ -9,7 +9,7 @@ class ModelUser extends CI_Model
 
 	public function getAll()
 	{
-		return $this->db->select('a.id_user, a.username, b.role, IF(a.id_role = 2, d.nama_lengkap, c.nama) AS nama ')
+		return $this->db->select('a.id_user, a.username, b.role, IF(a.id_role = "2", d.nama_lengkap,c.nama) AS nama')
 			->from('tbl_user a')
 			->join('tbl_mst_role b', 'a.id_role = b.id_role', 'left')
 			->join('tbl_mst_dosen c', 'a.id_biodata = c.id_dosen', 'left')
@@ -23,7 +23,7 @@ class ModelUser extends CI_Model
 	public function getBiodata($id)
 	{
 		if ($id == 2) {
-			return $this->db->select('a.nim as id, b.nama_lengkap as nama')->from('tbl_keting a
+			return $this->db->select('b.id_biodata as id, b.nama_lengkap as nama')->from('tbl_keting a
 			,tbl_mst_biodata b
 			,tbl_mst_mahasiswa c
 			')

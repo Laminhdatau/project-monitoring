@@ -13,6 +13,7 @@ class User_management extends CI_Controller
 		$data['title']	=	"User Management";
 		$data['role']	=	$this->ModelUser->getRole();
 		$data['user']	=	$this->ModelUser->getAll();
+		// var_dump($data);
 		$this->load->view('templates/header',$data);
 		$this->load->view('templates/navbar',$data);
 		$this->load->view('templates/sidebar',$data);

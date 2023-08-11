@@ -54,7 +54,7 @@ class Auth extends CI_Controller
 						'username' => $cekEmail->username,
 						'nama'	=> $getDataUser->nama,
 						'nidn'	=> $getDataUser->nidn,
-						'id_biodata' => "-",
+						'id_biodata' => $cekEmail->id_biodata,
 						'id_role' => $cekEmail->id_role,
 						'semester'	=>	"-",
 						'kelas'	=>	"-",

@@ -110,6 +110,7 @@
 
 		$(".item").click(function() {
 			var id = $(this).data('nim');
+console.log(id);
 			if (myChart) {
 				myChart.destroy();
 			}
