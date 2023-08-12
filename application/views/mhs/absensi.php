@@ -27,53 +27,67 @@
 					<h4 class="card-title">Laporan</h4>
 				</div>
 				<form action="<?= site_url('absensi/new') ?>" method="post" enctype="multipart/form-data">
-					<div class="card-body">
-						<div class="form-group">
-							<label for="nama">Pilih Jadwal</label>
-							<select class="form-control" id="id_jadwal" name="id_jadwal" required>
-								<option>Pilih Jadwal</option>
-								<?php foreach ($dosen as $s ) { ?>
-									<option value="<?= $s->id_jadwal ?>">Mata Kuliah : <?= $s->mata_kuliah ?>, Dosen Pengampuh : <?= $s->nama ?> </option>
-								<?php } ?>
-							</select>
+					<?php if (!empty($periode)) { ?>
+						<div class="card-body">
+							<div class="form-group">
+								<label for="periode">Periode</label>
+								<input type="hidden" class="form-control" id="id_kehadiran" name="id_kehadiran">
+								<input type="hidden" class="form-control" id="id_periode" name="id_periode" value="<?= $periode->id_periode; ?>" required>
+								<input type="text" class="form-control" placeholder="<?= $periode->periode; ?>" readonly>
+							</div>
+							<div class="form-group">
+								<label for="nama">Pilih Jadwal</label>
+								<select class="form-control" id="id_jadwal" name="id_jadwal" required>
+									<option>Pilih Jadwal</option>
+									<?php foreach ($dosen as $s) { ?>
+										<option value="<?= $s->id_jadwal ?>">Mata Kuliah : <?= $s->mata_kuliah ?>, Dosen Pengampuh : <?= $s->nama ?> </option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="hadir">Hadir</label>
+								<input type="text" class="form-control" id="hadir" name="hadir" placeholder="Jumlah Mahasiswa Hadir">
+							</div>
+							<div class="form-group">
+								<label for="izin">Izin</label>
+								<input type="text" class="form-control" id="izin" name="izin" placeholder="Jumlah Mahasiswa Izin">
+							</div>
+							<div class="form-group">
+								<label for="sakit">Sakit</label>
+								<input type="text" class="form-control" id="sakit" name="sakit" placeholder="Jumlah Mahasiswa Sakit">
+							</div>
+							<div class="form-group">
+								<label for="alfa">Alpha</label>
+								<input type="text" class="form-control" id="alfa" name="alfa" placeholder="Jumlah Mahasiswa Alpha">
+							</div>
+							<div class="form-group">
+								<label for="keterangan">Keterangan</label>
+								<textarea class="form-control" id="keterangan" name="keterangan"></textarea>
+							</div>
+
+							<div class="form-group">
+								<label for="nama">Pilih Status Kehadiran Dosen</label>
+								<select class="form-control" id="id_status" name="id_status" required>
+									<option>Pilih Status Kehadiran Dosen</option>
+									<?php foreach ($status as $s) { ?>
+										<option value="<?= $s->id_status_kehadiran ?>"><?= $s->status_kehadiran ?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="foto">Bukti Foto</label>
+								<input type="file" class="form-control" id="foto" name="foto" placeholder="Bukti Foto">
+							</div>
 						</div>
-						<div class="form-group">
-							<label for="hadir">Hadir</label>
-							<input type="text" class="form-control" id="hadir" name="hadir" placeholder="Jumlah Mahasiswa Hadir">
+						<div class="card-footer">
+							<button type="submit" class="btn btn-primary">Absen</button>
 						</div>
+					<?php } else { ?>
 						<div class="form-group">
-							<label for="izin">Izin</label>
-							<input type="text" class="form-control" id="izin" name="izin" placeholder="Jumlah Mahasiswa Izin">
+							<h2 class="text-center">Tidak Ada Periode Aktif</h2>
 						</div>
-						<div class="form-group">
-							<label for="sakit">Sakit</label>
-							<input type="text" class="form-control" id="sakit" name="sakit" placeholder="Jumlah Mahasiswa Sakit">
-						</div>
-						<div class="form-group">
-							<label for="alfa">Alpha</label>
-							<input type="text" class="form-control" id="alfa" name="alfa" placeholder="Jumlah Mahasiswa Alpha">
-						</div>
-						<div class="form-group">
-							<label for="keterangan">Keterangan</label>
-							<textarea class="form-control" id="keterangan" name="keterangan"></textarea>
-						</div>
-						<div class="form-group">
-							<label for="nama">Pilih Status Kehadiran Dosen</label>
-							<select class="form-control" id="id_status" name="id_status" required>
-								<option>Pilih Status Kehadiran Dosen</option>
-								<?php foreach ($status as $s ) { ?>
-									<option value="<?= $s->id_status_kehadiran ?>"><?= $s->status_kehadiran ?></option>
-								<?php } ?>
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="foto">Bukti Foto</label>
-							<input type="file" class="form-control" id="foto" name="foto" placeholder="Bukti Foto">
-						</div>
-					</div>
-					<div class="card-footer">
-						<button type="submit" class="btn btn-primary">Absen</button>
-					</div>
+					<?php } ?>
+
 				</form>
 				<!-- /.card -->
 			</div>

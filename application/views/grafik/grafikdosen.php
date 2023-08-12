@@ -101,7 +101,6 @@
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 	$(document).ready(function() {
@@ -125,7 +124,7 @@
 					const chartData = {
 						labels: labels,
 						datasets: [{
-							label: 'Kehadiran Dosen T.A '+ data.ta,
+							label: 'Kehadiran Dosen T.A ' + data.ta,
 							data: [data.hadir, data.izin, data.alpa],
 							backgroundColor: [
 								'rgba(255, 99, 132, 0.2)',

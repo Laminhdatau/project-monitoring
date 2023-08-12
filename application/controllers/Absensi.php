@@ -15,6 +15,7 @@ class Absensi extends CI_Controller
 	{
 		$data['title']	=	"Laporan";
 		$data['status']	=	$this->ModelAbsensi->getStatus();
+		$data['periode']	=	$this->ModelAbsensi->getPeriode();
 		$data['dosen']	=	$this->ModelAbsensi->getJadwal($this->uyes, $this->ayas);
 		$this->load->view('templates/header', $data);
 		$this->load->view('templates/navbar', $data);
@@ -39,6 +40,7 @@ class Absensi extends CI_Controller
 		} else {
 
 			$data = array(
+				'id_kehadiran' 				=> $this->input->post('id_kehadiran'),
 				'id_jadwal' 				=> $this->input->post('id_jadwal'),
 				'nim'						=> $this->nim,
 				'hadir'						=> $this->input->post('hadir'),
@@ -51,14 +53,26 @@ class Absensi extends CI_Controller
 				'is_verify'					=> '0',
 				'date_created'				=> date('Y-m-d H:i:s')
 			);
-			var_dump($data);
 
-			$absenlah = $this->ModelAbsensi->newAbsen($data);
+			$rekap = array(
+				'id_periode'            => $this->input->post('id_periode')
+			);
 
-			if ($absenlah == true) {
-				$this->session->set_flashdata('success', '<strong>SUCCESS!!!</strong> Berhasil Melakukan Absensi.');
-			} else {
+			
+			$this->db->trans_start();
+
+			$this->ModelAbsensi->newAbsen($data);
+			$id_kehadiran = $this->db->insert_id();  
+
+			$rekap['id_kehadiran'] = $id_kehadiran;
+			$this->ModelAbsensi->newRekap($rekap);
+
+			$this->db->trans_complete();
+
+			if ($this->db->trans_status() === FALSE) {
 				$this->session->set_flashdata('error', '<strong>ERROR!!!</strong> Gagal Melakukan Absensi.');
+			} else {
+				$this->session->set_flashdata('success', '<strong>SUCCESS!!!</strong> Berhasil Melakukan Absensi.');
 			}
 		}
 		redirect('absensi');

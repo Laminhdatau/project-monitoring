@@ -156,6 +156,43 @@
 							</li>
 
 
+							<li class="nav-item <?php if ($title == "Grafik Mahasiswa") {
+													echo "menu-open";
+												} elseif ($title == "Grafik Dosen") {
+													echo "menu-open";
+												} ?>">
+								<a href="#" class="nav-link <?php if ($title == "Grafik Mahasiswa") {
+																echo "active";
+															} elseif ($title == "Grafik Dosen") {
+																echo "active";
+															} ?>">
+									<i class="nav-icon fas fa-chart-bar"></i>
+									<p>
+										Grafik
+									</p>
+									<i class="right fas fa-angle-left"></i>
+								</a>
+								<ul class="nav nav-treeview">
+									<li class="nav-item">
+										<a href="<?= base_url('grafik/indexMhs') ?>" class="nav-link <?php if ($title == "Grafik Mahasiswa") {
+																											echo "active";
+																										} ?>">
+											<i class="far fa-circle nav-icon"></i>
+											<p>Grafik Mahasiswa</p>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a href="<?= base_url('grafik/indexDosen') ?>" class="nav-link <?php if ($title == "Grafik Dosen") {
+																											echo "active";
+																										} ?>">
+											<i class="far fa-circle nav-icon"></i>
+											<p>Grafik Dosen</p>
+										</a>
+									</li>
+								</ul>
+							</li>
+
+
 						<?php } ?>
 
 						<?php if ($this->session->userdata('id_role') == 4) { ?>
@@ -198,8 +235,8 @@
 									</li> -->
 									<li class="nav-item">
 										<a href="<?= base_url('grafik/indexForDosen') ?>" class="nav-link <?php if ($title == "Grafik Dosen") {
-																											echo "active";
-																										} ?>">
+																												echo "active";
+																											} ?>">
 											<i class="far fa-circle nav-icon"></i>
 											<p>Grafik Dosen</p>
 										</a>
