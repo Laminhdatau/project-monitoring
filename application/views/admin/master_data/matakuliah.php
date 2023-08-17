@@ -39,9 +39,9 @@
 									<input type="text" class="form-control" id="mata_kuliah" name="mata_kuliah" placeholder="Mata Kuliah" required>
 								</div>
 								<div class="form-group">
-									<label for="id_prodi">Pilih Prodi Ketua Tingkat</label>
+									<label for="id_prodi">Pilih Prodi</label>
 									<select class="form-control" id="id_prodi" name="id_prodi" required>
-										<option>Pilih Prodi Ketua Tingkat</option>
+										<option>Pilih Prodi</option>
 										<?php foreach ($prodi as $p) { ?>
 											<option value="<?= $p->id_prodi ?>"><?= $p->prodi ?></option>
 										<?php } ?>

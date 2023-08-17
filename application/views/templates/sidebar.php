@@ -324,6 +324,15 @@
 											<p>Status Kehadiran</p>
 										</a>
 									</li>
+
+									<li class="nav-item">
+										<a href="<?= base_url('master_data/periode') ?>" class="nav-link <?php if ($title == "Periode") {
+																														echo "active";
+																													} ?>">
+											<i class="far fa-circle nav-icon"></i>
+											<p>Periode</p>
+										</a>
+									</li>
 								</ul>
 							</li>
 						<?php } ?>

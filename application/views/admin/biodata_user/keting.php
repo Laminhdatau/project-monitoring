@@ -223,7 +223,7 @@
 		$("#search_term").keyup(function() {
 			var search_term = $(this).val();
 
-			if (search_term !== '' && search_term.length >= 3) { // Periksa apakah search_term tidak kosong
+			if (search_term !== '' && search_term.length >= 1) { // Periksa apakah search_term tidak kosong
 				$.ajax({
 					url: "<?php echo site_url('biodata_user/keting/cariKeting'); ?>",
 					method: "POST",
