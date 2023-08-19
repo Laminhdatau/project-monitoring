@@ -29,7 +29,7 @@ class Auth extends CI_Controller
 			if ($cekEmail->password == $password) {
 
 				if ($cekEmail->id_role == 2) {
-					
+
 					$getDataUser = $this->db->select('c.id_biodata,c.nama_lengkap as nama, b.*, a.nim')
 						->from('tbl_keting a')
 						->join('tbl_mst_mahasiswa b', 'b.nim = a.nim', 'left')
@@ -38,10 +38,12 @@ class Auth extends CI_Controller
 						->get()
 						->row();
 
+
 					$data_session = array(
 						'username' => $cekEmail->username,
 						'nama'	=> $getDataUser->nama,
 						'nim'	=> $getDataUser->nim,
+						'prodi'	=> $getDataUser->id_prodi,
 						'id_biodata' => $cekEmail->id_biodata,
 						'id_role' => $cekEmail->id_role,
 						'semester'	=>	$getDataUser->id_semester,
@@ -54,14 +56,14 @@ class Auth extends CI_Controller
 						'username' => $cekEmail->username,
 						'nama'	=> $getDataUser->nama,
 						'nidn'	=> $getDataUser->nidn,
+						'prodi'	=> $getDataUser->id_prodi,
 						'id_biodata' => $cekEmail->id_biodata,
 						'id_role' => $cekEmail->id_role,
-						'semester'	=>	"-",
-						'kelas'	=>	"-",
+						'semester'	=>	"",
+						'kelas'	=>	"",
 					);
 					$this->session->set_userdata($data_session);
 				}
-
 				redirect('dashboard');
 			} else {
 				$this->session->set_flashdata('error', '<strong>ERROR!!!</strong> Password Yang Anda Masukan Tidak Sesuai.');

@@ -16,7 +16,8 @@ class Absensi extends CI_Controller
 		$data['title']	=	"Laporan";
 		$data['status']	=	$this->ModelAbsensi->getStatus();
 		$data['periode']	=	$this->ModelAbsensi->getPeriode();
-		$data['dosen']	=	$this->ModelAbsensi->getJadwal($this->uyes, $this->ayas);
+		$data['jumlah'] = $this->ModelAbsensi->getJumlahMahasiswa($this->nim);
+		$data['dosen']	=	$this->ModelAbsensi->getDosenPengampuhKu($this->uyes, $this->ayas);
 		$this->load->view('templates/header', $data);
 		$this->load->view('templates/navbar', $data);
 		$this->load->view('templates/sidebar', $data);
@@ -24,13 +25,28 @@ class Absensi extends CI_Controller
 		$this->load->view('templates/footer', $data);
 	}
 
+
+	public function getMataKuliahku()
+	{
+		$dosenId = $this->input->post('dosen');
+		$kelasId = $this->uyes; 
+		$semesterId = $this->ayas; 
+
+		$jadwal = $this->ModelAbsensi->getJadwal($kelasId, $semesterId, $dosenId);
+		echo json_encode($jadwal);
+	}
+
+
+
+
+
 	public function new()
 	{
 		$upload_path = './uploads/';
 
 		$config['upload_path'] = $upload_path;
 		$config['allowed_types'] = 'jpg|png|jpeg|gif|';
-		$config['max_size'] = 4096; // 
+		$config['max_size'] = 4096;
 		$config['encrypt_name'] = TRUE;
 
 		$this->load->library('upload', $config);
@@ -58,11 +74,11 @@ class Absensi extends CI_Controller
 				'id_periode'            => $this->input->post('id_periode')
 			);
 
-			
+
 			$this->db->trans_start();
 
 			$this->ModelAbsensi->newAbsen($data);
-			$id_kehadiran = $this->db->insert_id();  
+			$id_kehadiran = $this->db->insert_id();
 
 			$rekap['id_kehadiran'] = $id_kehadiran;
 			$this->ModelAbsensi->newRekap($rekap);

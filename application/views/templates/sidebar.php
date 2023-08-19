@@ -326,11 +326,11 @@
 									</li>
 
 									<li class="nav-item">
-										<a href="<?= base_url('master_data/periode') ?>" class="nav-link <?php if ($title == "Periode") {
+										<a href="<?= base_url('master_data/periode') ?>" class="nav-link <?php if ($title == "Tahun Ajaran") {
 																														echo "active";
 																													} ?>">
 											<i class="far fa-circle nav-icon"></i>
-											<p>Periode</p>
+											<p>Tahun Ajaran</p>
 										</a>
 									</li>
 								</ul>

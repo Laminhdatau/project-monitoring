@@ -25,8 +25,22 @@
 				<div class="col-8">
 					<div class="card">
 						<div class="card-header">
-							<h4 class="card-title">Rekapan Kehadiran Mahasiswa</h4>
+							<div class="row col-12 d-flex align-items-center justify-content-between">
+								<div class="col-6">
+									<h4 class="card-title text-center">Rekapan Kehadiran Mahasiswa</h4>
+								</div>
+								<div class="col-6">
+									<select name="pertemuan" id="pertemuan" class="form-control">
+										<option value="">--PILIH PERTEMUAN--</option>
+										<?php foreach ($pertemuan as $p) { ?>
+											<option value="<?= $p->pertemuan; ?>"><?= $p->pertemuan; ?></option>
+										<?php } ?>
+									</select>
+								</div>
+							</div>
 						</div>
+
+
 						<div class="card-body">
 
 							<table id="laporan_kehadiran" class="table table-bordered table-striped">
@@ -43,7 +57,7 @@
 								<tbody>
 									<?php $no = 1;
 									foreach ($data as $d) { ?>
-										<tr  class="item" data-id="<?= $d->id_kehadiran; ?>">
+										<tr class="item" data-id="<?= $d->id_kehadiran; ?>">
 											<td><?= $no++; ?></td>
 											<td><?= $d->date_created; ?></td>
 											<td><?= $d->nama_lengkap; ?></td>
@@ -97,63 +111,62 @@
 
 
 <script>
-$(document).ready(function() {
-    var myChart; 
+	$(document).ready(function() {
+		var myChart;
 
 
-    $(".item").click(function() {
-        var id = $(this).data('id');
-        
-        if (myChart) {
-            myChart.destroy();
-        }
+		$(".item").click(function() {
+			var id = $(this).data('id');
 
-        $.ajax({
-            url: "getGrafikById/" + id,
-            method: "GET",
-            dataType: 'json',
-            success: function(data) {
-                console.log(data);
+			if (myChart) {
+				myChart.destroy();
+			}
 
-                const labels = ["Hadir", "Ijin", "Sakit", "Alpa"];
-                const chartData = {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Kehadiran Mahasiswa T.A '+ data.ta,
-                        data: [data.hadir, data.izin, data.sakit, data.alfa],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(54, 162, 235, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(75, 192, 192)',
-                            'rgb(153, 102, 255)',
-                            'rgb(54, 162, 235)'
-                        ],
-                        borderWidth: 1
-                    }]
-                };
+			$.ajax({
+				url: "getGrafikById/" + id,
+				method: "GET",
+				dataType: 'json',
+				success: function(data) {
+					console.log(data);
 
-                const chartConfig = {
-                    type: 'bar',
-                    data: chartData,
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                };
+					const labels = ["Hadir", "Ijin", "Sakit", "Alpa"];
+					const chartData = {
+						labels: labels,
+						datasets: [{
+							label: 'Kehadiran Mahasiswa T.A ' + data.ta,
+							data: [data.hadir, data.izin, data.sakit, data.alfa],
+							backgroundColor: [
+								'rgba(255, 99, 132, 0.2)',
+								'rgba(75, 192, 192, 0.2)',
+								'rgba(153, 102, 255, 0.2)',
+								'rgba(54, 162, 235, 0.2)'
+							],
+							borderColor: [
+								'rgb(255, 99, 132)',
+								'rgb(75, 192, 192)',
+								'rgb(153, 102, 255)',
+								'rgb(54, 162, 235)'
+							],
+							borderWidth: 1
+						}]
+					};
 
-                var ctx = document.getElementById('myChart').getContext('2d');
-                myChart = new Chart(ctx, chartConfig); 
-            }
-        });
-    });
-});
+					const chartConfig = {
+						type: 'bar',
+						data: chartData,
+						options: {
+							scales: {
+								y: {
+									beginAtZero: true
+								}
+							}
+						}
+					};
+
+					var ctx = document.getElementById('myChart').getContext('2d');
+					myChart = new Chart(ctx, chartConfig);
+				}
+			});
+		});
+	});
 </script>
-

@@ -34,26 +34,27 @@
 									<tr>
 										<th style="width: 3%;">NO</th>
 										<th>Keting</th>
-										<th>Nama Dosen</th>
+										<th>Dosen Pengampu</th>
+										<th>Matakuliah</th>
 										<th>Semester</th>
 										<th>Kelas</th>
 										<th>Hadir</th>
-										<th>Ijin</th>
-										<th>Alpa</th>
+										<th>Tidak Hadir</th>
 										<th>Total</th>
 									</tr>
 								</thead>
 								<tbody>
 									<?php $no = 1;
 									foreach ($grafik as $d) { ?>
-										<tr class="item" data-nim="<?= $d->nim; ?>">
+										<tr class="item" data-mk="<?= $d->id_mata_kuliah; ?>" data-nim="<?= $d->nim; ?>">
 											<td><?= $no++; ?></td>
 											<td><?= $d->nama_lengkap; ?></td>
 											<td><?= $d->nama; ?></td>
+											<td><?= $d->mata_kuliah; ?></td>
+
 											<td><?= $d->semester; ?></td>
 											<td><?= $d->kelas; ?></td>
 											<td><?= $d->hadir; ?></td>
-											<td><?= $d->izin; ?></td>
 											<td><?= $d->alpa; ?></td>
 											<td>Hadir <?= $d->hadir; ?> Kali dari 16 Pertemuan</td>
 										</tr>
@@ -109,34 +110,32 @@
 
 
 		$(".item").click(function() {
-			var id = $(this).data('nim');
-console.log(id);
+			var id = $(this).data('mk');
+			var nm = $(this).data('nim');
 			if (myChart) {
 				myChart.destroy();
 			}
 
 			$.ajax({
-				url: "getKehadiranDosenById/" + id,
+				url: "getKehadiranDosenById/" + id + '/' + nm,
 				method: "GET",
 				dataType: 'json',
 				success: function(data) {
 					console.log(data);
 
-					const labels = ["Hadir", "Ijin", "Alpa"];
+					const labels = ["Hadir", "Alpa"];
 					const chartData = {
 						labels: labels,
 						datasets: [{
-							label: 'Kehadiran Dosen T.A '+ data.ta,
-							data: [data.hadir, data.izin, data.alpa],
+							label: 'Kehadiran Dosen T.A ' + data.ta,
+							data: [data.hadir, data.alpa],
 							backgroundColor: [
 								'rgba(255, 99, 132, 0.2)',
-								'rgba(75, 192, 192, 0.2)',
-								'rgba(153, 102, 255, 0.2)'
+								'rgba(75, 192, 192, 0.2)'
 							],
 							borderColor: [
 								'rgb(255, 99, 132)',
-								'rgb(75, 192, 192)',
-								'rgb(153, 102, 255)'
+								'rgb(75, 192, 192)'
 							],
 							borderWidth: 1
 						}]

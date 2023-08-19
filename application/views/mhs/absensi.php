@@ -30,45 +30,54 @@
 					<?php if (!empty($periode)) { ?>
 						<div class="card-body">
 							<div class="form-group">
-								<label for="periode">Periode</label>
+								<label for="periode">Tahun Ajaran</label>
 								<input type="hidden" class="form-control" id="id_kehadiran" name="id_kehadiran">
 								<input type="hidden" class="form-control" id="id_periode" name="id_periode" value="<?= $periode->id_periode; ?>" required>
 								<input type="text" class="form-control" placeholder="<?= $periode->periode; ?>" readonly>
 							</div>
 							<div class="form-group">
-								<label for="nama">Pilih Jadwal</label>
-								<select class="form-control" id="id_jadwal" name="id_jadwal" required>
-									<option>Pilih Jadwal</option>
+								<label for="nama">Dosen Pengampu</label>
+								<select class="form-control" id="dosen" name="dosen" required>
+									<option value="">-- PILIH DOSEN PENGAMPU -- </option>
 									<?php foreach ($dosen as $s) { ?>
-										<option value="<?= $s->id_jadwal ?>">Mata Kuliah : <?= $s->mata_kuliah ?>, Dosen Pengampuh : <?= $s->nama ?> </option>
+										<option value="<?= $s->id_dosen ?>"><?= $s->nama ?></option>
 									<?php } ?>
 								</select>
 							</div>
-							<div class="form-group">
-								<label for="hadir">Hadir</label>
-								<input type="text" class="form-control" id="hadir" name="hadir" placeholder="Jumlah Mahasiswa Hadir">
-							</div>
-							<div class="form-group">
-								<label for="izin">Izin</label>
-								<input type="text" class="form-control" id="izin" name="izin" placeholder="Jumlah Mahasiswa Izin">
-							</div>
-							<div class="form-group">
-								<label for="sakit">Sakit</label>
-								<input type="text" class="form-control" id="sakit" name="sakit" placeholder="Jumlah Mahasiswa Sakit">
-							</div>
-							<div class="form-group">
-								<label for="alfa">Alpha</label>
-								<input type="text" class="form-control" id="alfa" name="alfa" placeholder="Jumlah Mahasiswa Alpha">
-							</div>
-							<div class="form-group">
-								<label for="keterangan">Keterangan</label>
-								<textarea class="form-control" id="keterangan" name="keterangan"></textarea>
+
+							<div class="form-group" id="idj">
+								<label for="nama">Matakuliah</label>
+								<select class="form-control" id="id_jadwal" name="id_jadwal" required>
+								</select>
 							</div>
 
 							<div class="form-group">
-								<label for="nama">Pilih Status Kehadiran Dosen</label>
+								<label for="hadir">Hadir</label>
+								<input type="number" class="form-control" id="hadir" name="hadir" min="0" max="<?= $jumlah ?>" value="<?= $jumlah; ?>" placeholder="Jumlah Mahasiswa Hadir" readonly>
+							</div>
+							<div class="form-group">
+								<label for="izin">Izin</label>
+								<input type="number" class="form-control" id="izin" name="izin" min="0" max="<?= $jumlah ?>" placeholder="Jumlah Mahasiswa Izin" oninput="calculateRemaining()">
+							</div>
+							<div class="form-group">
+								<label for="sakit">Sakit</label>
+								<input type="number" class="form-control" id="sakit" name="sakit" min="0" max="<?= $jumlah ?>" placeholder="Jumlah Mahasiswa Sakit" oninput="calculateRemaining()">
+							</div>
+							<div class="form-group">
+								<label for="alfa">Alpa</label>
+								<input type="number" class="form-control" id="alfa" name="alfa" min="0" max="<?= $jumlah ?>" placeholder="Jumlah Mahasiswa Alpha" oninput="calculateRemaining()">
+							</div>
+
+
+							<div class="form-group">
+								<label for="keterangan">Materi Perkuliahan</label>
+								<textarea class="form-control" id="keterangan" name="keterangan" required></textarea>
+							</div>
+
+							<div class="form-group">
+								<label for="nama">Kehadiran Dosen</label>
 								<select class="form-control" id="id_status" name="id_status" required>
-									<option>Pilih Status Kehadiran Dosen</option>
+									<option value="">--PILIH STATUS KEHADIRAN DOSEN--</option>
 									<?php foreach ($status as $s) { ?>
 										<option value="<?= $s->id_status_kehadiran ?>"><?= $s->status_kehadiran ?></option>
 									<?php } ?>
@@ -76,15 +85,16 @@
 							</div>
 							<div class="form-group">
 								<label for="foto">Bukti Foto</label>
-								<input type="file" class="form-control" id="foto" name="foto" placeholder="Bukti Foto">
+								<input type="file" class="form-control" id="foto" name="foto" placeholder="Bukti Foto" required>
 							</div>
 						</div>
 						<div class="card-footer">
-							<button type="submit" class="btn btn-primary">Absen</button>
+							<button type="submit" class="btn btn-primary">Submit</button>
 						</div>
+					
 					<?php } else { ?>
 						<div class="form-group">
-							<h2 class="text-center">Tidak Ada Periode Aktif</h2>
+							<h2 class="text-center">Tidak Ada Tahun Ajaran Aktif</h2>
 						</div>
 					<?php } ?>
 
@@ -126,3 +136,85 @@
 		});
 	</script>
 <?php } ?>
+
+
+<script>
+	function calculateRemaining() {
+		var total = <?= $jumlah ?>;
+		var izin = parseInt(document.getElementById("izin").value) || 0;
+		var sakit = parseInt(document.getElementById("sakit").value) || 0;
+		var alfa = parseInt(document.getElementById("alfa").value) || 0;
+		if (izin + sakit + alfa > total) {
+			var excess = izin + sakit + alfa - total;
+			if (alfa >= excess) {
+				alfa -= excess;
+			} else if (sakit >= excess) {
+				sakit -= excess;
+			} else {
+				izin -= excess;
+			}
+		}
+
+		var hadir = total - (izin + sakit + alfa);
+
+		if (hadir < 0) {
+			hadir = 0;
+		} else if (hadir > total) {
+			hadir = total;
+		}
+
+		document.getElementById("izin").value = izin;
+		document.getElementById("sakit").value = sakit;
+		document.getElementById("alfa").value = alfa;
+		document.getElementById("hadir").value = hadir;
+	}
+</script>
+
+
+
+<script>
+	$(document).ready(function() {
+		$('#idj').hide();
+		$('#dosen').change(function() {
+			var dosen = $(this).val();
+			$.ajax({
+				url: 'Absensi/getMataKuliahku',
+				method: 'POST',
+				dataType: 'JSON',
+				data: {
+					dosen: dosen
+				},
+				success: function(response) {
+					$('#idj').show();
+
+					$('#id_jadwal').empty();
+					$('#id_jadwal').append('<option value="" disabled selected>--PILIH MATAKULIAH--</option>');
+					$.each(response, function(index, mataKuliah) {
+						$('#id_jadwal').append('<option value="' + mataKuliah.id_jadwal + '">' + mataKuliah.mata_kuliah + '</option>');
+					});
+				},
+				error: function(xhr, status, error) {
+					console.log('Terjadi kesalahan saat mengambil data jadwal.');
+					console.log('Pesan error: ' + error);
+				}
+			});
+		});
+
+		// Tambahkan validasi required pada elemen kedua
+		$('#id_jadwal').change(function() {
+			if ($(this).val() === "") {
+				$(this).addClass('is-invalid'); // Tambahkan class untuk penanda invalid (sesuaikan dengan framework CSS Anda)
+			} else {
+				$(this).removeClass('is-invalid');
+			}
+		});
+
+		// Submit form hanya jika kedua elemen terpilih
+		$('form').submit(function(event) {
+			if ($('#dosen').val() === "" || $('#id_jadwal').val() === "") {
+				event.preventDefault();
+				alert('Harap lengkapi pilihan dosen dan matakuliah.');
+			}
+		});
+	});
+</script>
