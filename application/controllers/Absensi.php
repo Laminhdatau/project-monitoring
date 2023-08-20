@@ -17,7 +17,7 @@ class Absensi extends CI_Controller
 		$data['status']	=	$this->ModelAbsensi->getStatus();
 		$data['periode']	=	$this->ModelAbsensi->getPeriode();
 		$data['jumlah'] = $this->ModelAbsensi->getJumlahMahasiswa($this->nim);
-		$data['dosen']	=	$this->ModelAbsensi->getDosenPengampuhKu($this->uyes, $this->ayas);
+		$data['dosen']	=	$this->ModelAbsensi->getDosenPengampuhKu($this->ayas, $this->uyes);
 		$this->load->view('templates/header', $data);
 		$this->load->view('templates/navbar', $data);
 		$this->load->view('templates/sidebar', $data);
@@ -29,8 +29,8 @@ class Absensi extends CI_Controller
 	public function getMataKuliahku()
 	{
 		$dosenId = $this->input->post('dosen');
-		$kelasId = $this->uyes; 
-		$semesterId = $this->ayas; 
+		$kelasId = $this->uyes;
+		$semesterId = $this->ayas;
 
 		$jadwal = $this->ModelAbsensi->getJadwal($kelasId, $semesterId, $dosenId);
 		echo json_encode($jadwal);

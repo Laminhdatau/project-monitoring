@@ -55,13 +55,12 @@ class ModelKeting extends CI_Model
 				->row();
 
 
-			if ($additional_data) { // Memastikan ada data tambahan sebelum mengakses properti
+			if ($additional_data) { 
 				$result->nama = $additional_data->nama;
 				$result->id_prodi = $additional_data->id_prodi;
 				$result->id_semester = $additional_data->id_semester;
 				$result->id_kelas = $additional_data->id_kelas;
 			} else {
-				// Set properti tambahan ke nilai default jika data tambahan tidak ada
 				$result->nama = null;
 				$result->id_prodi = null;
 				$result->id_semester = null;
@@ -104,6 +103,12 @@ class ModelKeting extends CI_Model
 	public function newKeting($data)
 	{
 		$this->db->insert('tbl_keting', $data);
+		return true;
+	}
+
+	public function newJumlahMhs($data)
+	{
+		$this->db->insert('tbl_jumlah_mahasiswa', $data);
 		return true;
 	}
 

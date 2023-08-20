@@ -110,7 +110,10 @@
 						</div>
 					</div>
 
-
+					<div class="form-group">
+						<label for="id_prodi">Jumlah Personil/Mahasiswa</label>
+						<input type="number" name="jumlahmhs" id="jumlahmhs" class="form-control" placeholder="Jumlah Mahasiswa" required>
+					</div>
 					<div class="form-group">
 						<label for="id_prodi">Pilih Prodi Ketua Tingkat</label>
 						<select class="form-control" id="id_prodi" name="id_prodi" disabled required>

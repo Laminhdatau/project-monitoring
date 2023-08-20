@@ -49,19 +49,26 @@ class Keting extends CI_Controller
 		$data = array(
 			'nim' => $this->input->post('nim')
 		);
-		
-		$tambah = false; // Inisialisasi variabel tambah
-		
+
+		$jum = array(
+			'nim_keting' => $data['nim'],
+			'jumlah_mahasiswa' => $this->input->post('jumlahmhs'),
+		);
+
+		$tambah = false;
+		$ok = false;
+
 		if (!empty($data['nim'])) {
 			$tambah = $this->ModelKeting->newKeting($data);
+			$ok = $this->ModelKeting->newJumlahMhs($jum);
 		}
-	
-		if ($tambah == true) {
+
+		if ($tambah == true && $ok == true) {
 			$this->session->set_flashdata('success', '<strong>SUCCESS!!!</strong> Berhasil Menambahakan Ketua Tingkat Baru.');
 		} else {
 			$this->session->set_flashdata('error', '<strong>ERROR!!!</strong> Gagal Menambahakan Ketua Tingkat Baru.');
 		}
-		
+
 		redirect('biodata_user/keting');
 	}
 

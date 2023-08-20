@@ -15,6 +15,62 @@ class Grafik extends CI_Controller
 		$data['title']	=	"Grafik Mahasiswa";
 		$data['data']	=	$this->ModelGrafik->getAllKehadiranMhs();
 		$data['pertemuan']	= $this->ModelGrafik->getPertemuan();
+		$bulan = [
+			[
+				'id_bulan' => 1,
+				'bulan' => 'Januari'
+			],
+			[
+				'id_bulan' => 2,
+				'bulan' => 'Februari'
+			],
+			[
+				'id_bulan' => 3,
+				'bulan' => 'Maret'
+			],
+			[
+				'id_bulan' => 4,
+				'bulan' => 'April'
+			],
+			[
+				'id_bulan' => 5,
+				'bulan' => 'Mei'
+			],
+			[
+				'id_bulan' => 6,
+				'bulan' => 'Juni'
+			],
+			[
+				'id_bulan' => 7,
+				'bulan' => 'Juli'
+			],
+			[
+				'id_bulan' => 8,
+				'bulan' => 'Agustus'
+			],
+			[
+				'id_bulan' => 9,
+				'bulan' => 'September'
+			],
+			[
+				'id_bulan' => 10,
+				'bulan' => 'Oktober'
+			],
+			[
+				'id_bulan' => 11,
+				'bulan' => 'November'
+			],
+			[
+				'id_bulan' => 12,
+				'bulan' => 'Desember'
+			]
+		];
+
+
+
+
+		$data['bulan']	= $bulan;
+
 		$this->load->view('templates/header', $data);
 		$this->load->view('templates/navbar', $data);
 		$this->load->view('templates/sidebar', $data);
@@ -22,13 +78,32 @@ class Grafik extends CI_Controller
 		$this->load->view('templates/footer', $data);
 	}
 
+	// public function getRekapByPertemuan()
+	// {
+
+	// 	$id = $this->input->post('idpertemuan');
+	// 	$bln = $this->input->post('bulan');
+	// 	$data = $this->ModelGrafik->getListPertemuan($id, $bln);
+	// 	echo json_encode($data);
+	// }
+
 	public function getRekapByPertemuan()
 	{
-
 		$id = $this->input->post('idpertemuan');
-		$data = $this->ModelGrafik->getListPertemuan($id);
-		echo json_encode($data);
+		$bln = $this->input->post('bulan');
+
+		$data = $this->ModelGrafik->getListPertemuan($id, $bln);
+
+		// Buat response JSON
+		$response = [
+			'data' => $data,
+			'message' => 'Data retrieved successfully'
+		];
+
+		header('Content-Type: application/json');
+		echo json_encode($response);
 	}
+
 
 
 	public function getGrafikById($id)

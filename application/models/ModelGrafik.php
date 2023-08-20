@@ -7,11 +7,28 @@ class ModelGrafik extends CI_Model
 		return $this->db->get('tbl_pertemuan')->result();
 	}
 
-	public function getListPertemuan($idp)
+	public function getListPertemuan($idp = null, $bln = null)
 	{
-		return $this->db->query('select * from v_per_pertemuan where pertemuan="'.$idp.'"
-		')->result();
+		$conditions = [];
+
+		if ($idp != null) {
+			$conditions[] = "pertemuan = '" . $idp . "'";
+		}
+
+		if ($bln != null) {
+			$conditions[] = "MONTH(date_created) = '" . $bln . "'";
+		}
+
+		$whereClause = "";
+		if (!empty($conditions)) {
+			$whereClause = "WHERE " . implode(" AND ", $conditions);
+		}
+
+		$query = "SELECT * FROM v_per_pertemuan " . $whereClause;
+
+		return $this->db->query($query)->result();
 	}
+
 
 	public function getById($id)
 	{
@@ -55,7 +72,7 @@ class ModelGrafik extends CI_Model
 				j.id_kelas,
 				p.id_periode,
 				k.id_kehadiran
-				ORDER BY k.nim,j.id_semester,j.id_kelas;')->row();
+				ORDER BY k.nim,j.id_semester,j.id_kelas')->row();
 	}
 
 

@@ -32,8 +32,6 @@
 		<script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.colVis.min.js') ?>"></script>
 		<!-- ChartJS -->
 		<script src="<?= base_url('public/plugins/chart.js/Chart.min.js') ?>"></script>
-		<!-- Sparkline -->
-		<script src="<?= base_url('public/plugins/sparklines/sparkline.js') ?>"></script>
 		<!-- JQVMap -->
 		<script src="<?= base_url('public/plugins/jqvmap/jquery.vmap.min.js') ?>"></script>
 		<script src="<?= base_url('public/plugins/jqvmap/maps/jquery.vmap.usa.js') ?>"></script>

@@ -21,8 +21,30 @@
 	<!-- Main content -->
 	<section class="content">
 		<div class="container-fluid">
+
 			<div class="row">
-				<div class="col-8">
+				<div class="col-12">
+					<div class="card ">
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">Grafik Pertemuan Dosen </h4>
+									</div>
+									<div class="card-body">
+										<div class="container">
+											<canvas id="myChart"></canvas>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12">
 					<div class="card">
 						<div class="row col-12 d-flex align-items-center justify-content-between">
 							<div class="col-6">
@@ -76,19 +98,7 @@
 					</div>
 				</div>
 
-				<div class="col-4">
-					<div class="card">
-						<div class="card-header">
-							<h4 class="card-title">Grafik Pertemuan Dosen </h4>
-						</div>
-						<div class="card-body">
-							<div class="container">
-								<canvas id="myChart"></canvas>
-							</div>
-						</div>
-						<!-- /.card -->
-					</div>
-				</div>
+
 			</div>
 
 		</div><!-- /.container-fluid -->

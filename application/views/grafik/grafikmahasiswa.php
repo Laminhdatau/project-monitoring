@@ -16,32 +16,67 @@
 			</div><!-- /.row -->
 		</div><!-- /.container-fluid -->
 	</div>
-	<!-- /.content-header -->
+
+
+
 
 	<!-- Main content -->
 	<section class="content">
 		<div class="container-fluid">
+
 			<div class="row">
-				<div class="col-8">
+				<div class="col-12">
+					<div class="card">
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">Grafik Mahasiswa </h4>
+									</div>
+									<div class="card-body">
+										<div class="container">
+											<canvas id="myChart"></canvas>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12">
 					<div class="card">
 						<div class="card-header">
 							<div class="row col-12 d-flex align-items-center justify-content-between">
-								<div class="col-6">
-									<h4 class="card-title text-center">Rekapan Kehadiran Mahasiswa</h4>
+								<div class="col-3">
+									<h4 class="card-title text-center">Kehadiran Mahasiswa</h4>
 								</div>
 								<div class="col-6">
 									<select name="idpertemuan" id="idpertemuan" class="form-control">
-										<option value="">--PILIH PERTEMUAN--</option>
+										<option value="">-- PERTEMUAN --</option>
 										<?php foreach ($pertemuan as $p) { ?>
 											<option value="<?= $p->id_pertemuan; ?>"><?= $p->pertemuan; ?></option>
 										<?php } ?>
 									</select>
 								</div>
+								<div class="col-3">
+									<select name="bulan" id="bulan" class="form-control">
+										<option value="">-- BULAN --</option>
+										<?php foreach ($bulan as $p) { ?>
+											<option value="<?= $p['id_bulan']; ?>"><?= $p['bulan']; ?></option>
+										<?php } ?>
+									</select>
+								</div>
+
 							</div>
 						</div>
+					</div>
 
 
-						<div class="card-body">
+					<div class="card p-3">
+						<div class="table-responsive">
 							<table id="laporan_kehadiran" class="table table-bordered table-striped">
 								<thead>
 									<tr>
@@ -69,33 +104,14 @@
 											<td><?= $d->jumlah_mahasiswa . ' Orang'; ?></td>
 										</tr>
 									<?php } ?>
-
-
 								</tbody>
-								<tbody id="item2">
-
-								</tbody>
-
+								<tbody id="item2"></tbody>
 							</table>
 						</div>
-					</div>
-				</div>
 
-				<div class="col-4">
-					<div class="card">
-						<div class="card-header">
-							<h4 class="card-title">Grafik Mahasiswa Kelas </h4>
-						</div>
-						<div class="card-body">
-							<div class="container">
-								<canvas id="myChart"></canvas>
-							</div>
-						</div>
-						<!-- /.card -->
 					</div>
 				</div>
 			</div>
-
 		</div><!-- /.container-fluid -->
 	</section>
 	<!-- /.content -->
@@ -178,47 +194,53 @@
 </script>
 
 
+
 <script>
 	$(document).ready(function() {
 		$('#item2').hide();
-		$('#idpertemuan').change(function() {
-			var idp = $(this).val();
+
+		// Function untuk mengambil dan menampilkan data
+		function fetchData(idp, bulan) {
 			$.ajax({
 				url: 'getRekapByPertemuan',
 				method: 'post',
 				dataType: 'json',
 				data: {
-					idpertemuan: idp
+					idpertemuan: idp,
+					bulan: bulan
 				},
 				success: function(response) {
 					$('#item2').show();
 					$('#item1').hide();
-
 					$('#item2').empty();
 
-					// Loop melalui data yang diterima dari respons JSON
-					$.each(response, function(index, data) {
-						console.log(data.id_kehadiran);
+					$.each(response.data, function(index, data) {
 						var newRow = `
-                            <tr class="item2" data-idku="${data.id_kehadiran}">
-                                <td>${index + 1}</td>
-                                <td>${data.date_created}</td>
-                                <td>${data.nama_lengkap}</td>
-                                <td>${data.semester}</td>
-                                <td>${data.kelas}</td>
-                                <td>${data.mata_kuliah}</td>
-                                <td>${data.nama}</td>
-                                <td>${data.jumlah_mahasiswa} Orang</td>
-                            </tr>
-                        `;
-
+                        <tr class="item2" data-idku="${data.id_kehadiran}">
+                            <td>${index + 1}</td>
+                            <td>${data.date_created}</td>
+                            <td>${data.nama_lengkap}</td>
+                            <td>${data.semester}</td>
+                            <td>${data.kelas}</td>
+                            <td>${data.mata_kuliah}</td>
+                            <td>${data.nama}</td>
+                            <td>${data.jumlah_mahasiswa} Orang</td>
+                        </tr>
+                    `;
 						$('#item2').append(newRow);
 					});
 				}
-			})
-		})
-	})
+			});
+		}
+
+		$('#idpertemuan, #bulan').change(function() {
+			var idp = $('#idpertemuan').val();
+			var bulan = $('#bulan').val();
+			fetchData(idp, bulan);
+		});
+	});
 </script>
+
 
 
 <script>

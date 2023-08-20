@@ -26,8 +26,23 @@
 				<div class="card-header">
 					<h4 class="card-title">Laporan</h4>
 				</div>
-				<form action="<?= site_url('absensi/new') ?>" method="post" enctype="multipart/form-data">
-					<?php if (!empty($periode)) { ?>
+				<?php if (empty($periode)) { ?>
+					<div class="form-group">
+						<h2 class="text-center">Tidak Ada Tahun Ajaran Aktif</h2>
+					</div>
+				<?php } else if (empty($dosen)) { ?>
+					<div class="form-group">
+						<h2 class="text-center">Tidak Ada Dosen Pengampu Pada Jadwal</h2>
+					</div>
+				<?php } else if (empty($jumlah) || $jumlah === '0' || $jumlah === null) { ?>
+					<!-- Tidak ada personil -->
+					<div class="form-group">
+						<h2 class="text-center">Anda Tidak Memiliki Personil</h2>
+					</div>
+
+				<?php } else { ?>
+					<form action="<?= site_url('absensi/new') ?>" method="post" enctype="multipart/form-data">
+
 						<div class="card-body">
 							<div class="form-group">
 								<label for="periode">Tahun Ajaran</label>
@@ -91,14 +106,9 @@
 						<div class="card-footer">
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</div>
-					
-					<?php } else { ?>
-						<div class="form-group">
-							<h2 class="text-center">Tidak Ada Tahun Ajaran Aktif</h2>
-						</div>
-					<?php } ?>
 
-				</form>
+					</form>
+				<?php } ?>
 				<!-- /.card -->
 			</div>
 		</div><!-- /.container-fluid -->
