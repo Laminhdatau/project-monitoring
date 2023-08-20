@@ -24,8 +24,18 @@
 			<div class="row">
 				<div class="col-8">
 					<div class="card">
-						<div class="card-header">
-							<h4 class="card-title">Rekapan Kehadiran Dosen</h4>
+						<div class="row col-12 d-flex align-items-center justify-content-between">
+							<div class="col-6">
+								<h4 class="card-title text-center">Rekapan Kehadiran Dosen</h4>
+							</div>
+							<div class="col-6">
+								<select name="idpertemuan" id="idpertemuan" class="form-control">
+									<option value="">--PILIH PERTEMUAN--</option>
+									<?php foreach ($pertemuan as $p) { ?>
+										<option value="<?= $p->id_pertemuan; ?>"><?= $p->pertemuan; ?></option>
+									<?php } ?>
+								</select>
+							</div>
 						</div>
 						<div class="card-body">
 

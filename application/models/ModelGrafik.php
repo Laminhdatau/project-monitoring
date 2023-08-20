@@ -4,7 +4,13 @@ class ModelGrafik extends CI_Model
 {
 	public function getPertemuan()
 	{
-		return $this->db->get('v_pertemuan')->result();
+		return $this->db->get('tbl_pertemuan')->result();
+	}
+
+	public function getListPertemuan($idp)
+	{
+		return $this->db->query('select * from v_per_pertemuan where pertemuan="'.$idp.'"
+		')->result();
 	}
 
 	public function getById($id)

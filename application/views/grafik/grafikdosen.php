@@ -27,7 +27,7 @@
 						<div class="card-header">
 							<h4 class="card-title">Rekapan Kehadiran Dosen</h4>
 
-							
+							 
 						</div>
 						<div class="card-body">
 							<table id="laporan_kehadiran" class="table table-bordered table-striped">

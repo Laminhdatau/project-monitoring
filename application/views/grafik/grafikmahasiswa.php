@@ -30,10 +30,10 @@
 									<h4 class="card-title text-center">Rekapan Kehadiran Mahasiswa</h4>
 								</div>
 								<div class="col-6">
-									<select name="pertemuan" id="pertemuan" class="form-control">
+									<select name="idpertemuan" id="idpertemuan" class="form-control">
 										<option value="">--PILIH PERTEMUAN--</option>
 										<?php foreach ($pertemuan as $p) { ?>
-											<option value="<?= $p->pertemuan; ?>"><?= $p->pertemuan; ?></option>
+											<option value="<?= $p->id_pertemuan; ?>"><?= $p->pertemuan; ?></option>
 										<?php } ?>
 									</select>
 								</div>
@@ -42,7 +42,6 @@
 
 
 						<div class="card-body">
-
 							<table id="laporan_kehadiran" class="table table-bordered table-striped">
 								<thead>
 									<tr>
@@ -51,10 +50,12 @@
 										<th>Keting</th>
 										<th>Semester</th>
 										<th>Kelas</th>
+										<th>Matakuliah</th>
+										<th>Dosen Pengampu</th>
 										<th style="width: 12%;">Jumlah Mahasiswa</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody id="item1">
 									<?php $no = 1;
 									foreach ($data as $d) { ?>
 										<tr class="item" data-id="<?= $d->id_kehadiran; ?>">
@@ -63,13 +64,20 @@
 											<td><?= $d->nama_lengkap; ?></td>
 											<td><?= $d->semester; ?></td>
 											<td><?= $d->kelas; ?></td>
+											<td><?= $d->mata_kuliah; ?></td>
+											<td><?= $d->nama; ?></td>
 											<td><?= $d->jumlah_mahasiswa . ' Orang'; ?></td>
 										</tr>
 									<?php } ?>
+
+
 								</tbody>
+								<tbody id="item2">
+
+								</tbody>
+
 							</table>
 						</div>
-						<!-- /.card -->
 					</div>
 				</div>
 
@@ -113,10 +121,113 @@
 <script>
 	$(document).ready(function() {
 		var myChart;
-
-
 		$(".item").click(function() {
 			var id = $(this).data('id');
+
+			if (myChart) {
+				myChart.destroy();
+			}
+
+			$.ajax({
+				url: "getGrafikById/" + id,
+				method: "GET",
+				dataType: 'json',
+				success: function(data) {
+					console.log(data);
+
+					const labels = ["Hadir", "Ijin", "Sakit", "Alpa"];
+					const chartData = {
+						labels: labels,
+						datasets: [{
+							label: 'Kehadiran Mahasiswa T.A ' + data.ta,
+							data: [data.hadir, data.izin, data.sakit, data.alfa],
+							backgroundColor: [
+								'rgba(255, 99, 132, 0.2)',
+								'rgba(75, 192, 192, 0.2)',
+								'rgba(153, 102, 255, 0.2)',
+								'rgba(54, 162, 235, 0.2)'
+							],
+							borderColor: [
+								'rgb(255, 99, 132)',
+								'rgb(75, 192, 192)',
+								'rgb(153, 102, 255)',
+								'rgb(54, 162, 235)'
+							],
+							borderWidth: 1
+						}]
+					};
+
+					const chartConfig = {
+						type: 'bar',
+						data: chartData,
+						options: {
+							scales: {
+								y: {
+									beginAtZero: true
+								}
+							}
+						}
+					};
+
+					var ctx = document.getElementById('myChart').getContext('2d');
+					myChart = new Chart(ctx, chartConfig);
+				}
+			});
+		});
+	});
+</script>
+
+
+<script>
+	$(document).ready(function() {
+		$('#item2').hide();
+		$('#idpertemuan').change(function() {
+			var idp = $(this).val();
+			$.ajax({
+				url: 'getRekapByPertemuan',
+				method: 'post',
+				dataType: 'json',
+				data: {
+					idpertemuan: idp
+				},
+				success: function(response) {
+					$('#item2').show();
+					$('#item1').hide();
+
+					$('#item2').empty();
+
+					// Loop melalui data yang diterima dari respons JSON
+					$.each(response, function(index, data) {
+						console.log(data.id_kehadiran);
+						var newRow = `
+                            <tr class="item2" data-idku="${data.id_kehadiran}">
+                                <td>${index + 1}</td>
+                                <td>${data.date_created}</td>
+                                <td>${data.nama_lengkap}</td>
+                                <td>${data.semester}</td>
+                                <td>${data.kelas}</td>
+                                <td>${data.mata_kuliah}</td>
+                                <td>${data.nama}</td>
+                                <td>${data.jumlah_mahasiswa} Orang</td>
+                            </tr>
+                        `;
+
+						$('#item2').append(newRow);
+					});
+				}
+			})
+		})
+	})
+</script>
+
+
+<script>
+	$(document).ready(function() {
+		var myChart;
+
+		// Menggunakan event delegation dengan .on() untuk elemen dinamis
+		$(document).on("click", ".item2", function() {
+			var id = $(this).data('idku');
 
 			if (myChart) {
 				myChart.destroy();
