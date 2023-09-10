@@ -7,6 +7,11 @@ class ModelGrafik extends CI_Model
 		return $this->db->get('tbl_pertemuan')->result();
 	}
 
+	public function getDosen()
+	{
+		return $this->db->get('tbl_mst_dosen')->result();
+	}
+
 	public function getListPertemuan($idp = null, $bln = null)
 	{
 		$conditions = [];
@@ -28,6 +33,37 @@ class ModelGrafik extends CI_Model
 
 		return $this->db->query($query)->result();
 	}
+
+	public function rekapMk($dosen = null, $bulan = null, $tahun = null)
+	{
+		$clause = "";
+
+		if (!empty($dosen) && !empty($bulan) && !empty($tahun)) {
+			$clause = "AND p.id_dosen = '$dosen'
+						AND MONTH(p.date_created) = '$bulan'
+						AND YEAR(p.date_created) = '$tahun'";
+		}
+
+		return $this->db->query("SELECT
+
+        j.id_dosen,
+        j.id_mata_kuliah,
+        mk.mata_kuliah,
+        COUNT(*) AS jumlah
+      FROM
+        v_per_pertemuan p
+, tbl_jadwal j
+  
+      , tbl_mst_mata_kuliah mk
+where mk.id_mata_kuliah = j.id_mata_kuliah
+and p.id_kelas = j.id_kelas
+AND p.id_mata_kuliah = j.id_mata_kuliah
+ " . $clause . "
+    GROUP BY
+    j.id_dosen,
+    p.id_mata_kuliah;")->result();
+	}
+
 
 
 	public function getById($id)
@@ -65,13 +101,18 @@ class ModelGrafik extends CI_Model
 				and k.id_kehadiran="' . $id . '"
 
 			GROUP BY
-				k.nim,
-				d.id_dosen,
-				j.id_jadwal,
-				j.id_semester,
-				j.id_kelas,
-				p.id_periode,
-				k.id_kehadiran
+			k.id_kehadiran,
+					k.nim,
+					b.nama_lengkap,
+					k.date_created,
+					d.id_dosen,
+					j.id_jadwal,
+					j.id_semester,
+					j.id_kelas,
+					c.kelas,
+					p.id_periode,
+					mk.mata_kuliah,
+					d.nama
 				ORDER BY k.nim,j.id_semester,j.id_kelas')->row();
 	}
 
@@ -113,13 +154,19 @@ class ModelGrafik extends CI_Model
 				k.is_verify = "1"
 				and p.status="1"
 			GROUP BY
+			k.id_kehadiran,
 				k.nim,
+				b.nama_lengkap,
+				k.date_created,
 				d.id_dosen,
 				j.id_jadwal,
 				j.id_semester,
+				sm.semester,
 				j.id_kelas,
+				c.kelas,
 				p.id_periode,
-				k.id_kehadiran
+				mk.mata_kuliah,
+				d.nama
 				ORDER BY k.nim,j.id_semester,j.id_kelas;')->result();
 	}
 
@@ -158,13 +205,18 @@ class ModelGrafik extends CI_Model
 		k.is_verify = "1"
         and p.status="1"
 	GROUP BY
-		k.nim,
+	k.nim,
+        b.nama_lengkap,
 		d.id_dosen,
         j.id_jadwal,
         j.id_semester,
-        j.id_mata_kuliah,
+		s.semester,
         j.id_kelas,
-        p.id_periode;')->result();
+        c.kelas,
+        p.id_periode,
+        j.id_mata_kuliah,
+        mk.mata_kuliah,
+        d.nama')->result();
 	}
 
 

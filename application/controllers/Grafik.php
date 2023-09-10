@@ -78,14 +78,6 @@ class Grafik extends CI_Controller
 		$this->load->view('templates/footer', $data);
 	}
 
-	// public function getRekapByPertemuan()
-	// {
-
-	// 	$id = $this->input->post('idpertemuan');
-	// 	$bln = $this->input->post('bulan');
-	// 	$data = $this->ModelGrafik->getListPertemuan($id, $bln);
-	// 	echo json_encode($data);
-	// }
 
 	public function getRekapByPertemuan()
 	{
@@ -103,6 +95,22 @@ class Grafik extends CI_Controller
 		header('Content-Type: application/json');
 		echo json_encode($response);
 	}
+
+	public function getRekapMK()
+	{
+		$dosen = $this->input->post('dosen');
+		$bulan = $this->input->post('bulan');
+		$tahun = $this->input->post('tahun');
+
+		$data = $this->ModelGrafik->rekapMk($dosen, $bulan,$tahun);
+
+		  // Menggunakan header JSON
+		  header('Content-Type: application/json');
+
+		  // Mengembalikan data dalam format JSON
+		  echo json_encode($data);
+	}
+
 
 
 
@@ -124,6 +132,75 @@ class Grafik extends CI_Controller
 	public function indexDosen()
 	{
 		$data['title']	=	"Grafik Dosen";
+		$bulan = [
+			[
+				'id_bulan' => 1,
+				'bulan' => 'Januari'
+			],
+			[
+				'id_bulan' => 2,
+				'bulan' => 'Februari'
+			],
+			[
+				'id_bulan' => 3,
+				'bulan' => 'Maret'
+			],
+			[
+				'id_bulan' => 4,
+				'bulan' => 'April'
+			],
+			[
+				'id_bulan' => 5,
+				'bulan' => 'Mei'
+			],
+			[
+				'id_bulan' => 6,
+				'bulan' => 'Juni'
+			],
+			[
+				'id_bulan' => 7,
+				'bulan' => 'Juli'
+			],
+			[
+				'id_bulan' => 8,
+				'bulan' => 'Agustus'
+			],
+			[
+				'id_bulan' => 9,
+				'bulan' => 'September'
+			],
+			[
+				'id_bulan' => 10,
+				'bulan' => 'Oktober'
+			],
+			[
+				'id_bulan' => 11,
+				'bulan' => 'November'
+			],
+			[
+				'id_bulan' => 12,
+				'bulan' => 'Desember'
+			]
+		];
+
+
+
+		$tahun_mulai = 2022;
+		$tahun_sekarang = date('Y');
+
+		$tahun = [];
+		for ($i = $tahun_mulai; $i <= $tahun_sekarang; $i++) {
+			$tahun[] = [
+				'id_tahun' => $i,
+				'tahun' => $i
+			];
+		}
+
+
+
+		$data['tahun'] = $tahun;
+		$data['bulan']	= $bulan;
+		$data['dosen']=$this->ModelGrafik->getDosen();
 		$data['grafik']	=	$this->ModelGrafik->getAllKehadiranDosen();
 		$data['pertemuan']	= $this->ModelGrafik->getPertemuan();
 

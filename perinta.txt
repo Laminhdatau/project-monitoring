@@ -1,5 +1,12 @@
+CREATE VIEW v_pertemuan AS
 SELECT
-    row_number() OVER(PARTITION BY j.id_mata_kuliah ORDER BY h.date_created) AS pertemuan,
+    (
+        SELECT COUNT(*)
+        FROM tbl_kehadiran AS h2
+        WHERE j.id_jadwal = h2.id_jadwal
+        AND h2.date_created <= h.date_created
+        AND h2.is_verify = '1'
+    ) AS pertemuan,
     h.id_kehadiran,
     j.id_dosen,
     j.id_kelas,
@@ -9,15 +16,17 @@ SELECT
     h.date_created
 FROM
     tbl_kehadiran h
-    JOIN tbl_jadwal j ON j.id_jadwal = h.id_jadwal
+JOIN
+    tbl_jadwal j
+ON
+    j.id_jadwal = h.id_jadwal
 WHERE
     h.date_created IS NOT NULL
     AND h.is_verify = '1'
 ORDER BY
     j.id_mata_kuliah,
     h.date_created,
-    h.nim
-LIMIT 16;
+    h.nim;
 
 
 
@@ -39,4 +48,4 @@ and m.id_mata_kuliah=v.id_mata_kuliah
 and s.id_semester=v.id_semester
 and a.id_kehadiran=v.id_kehadiran
 and v.pertemuan ='1'
-GROUP BY v.id_dosen,v.nim,v.id_semester,v.id_kelas,v.id_mata_kuliah,v.id_kehadiran;
+GROUP BY v.id_kehadiran,vm.nama_lengkap;
