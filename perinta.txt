@@ -1,51 +1,7 @@
-CREATE VIEW v_pertemuan AS
-SELECT
-    (
-        SELECT COUNT(*)
-        FROM tbl_kehadiran AS h2
-        WHERE j.id_jadwal = h2.id_jadwal
-        AND h2.date_created <= h.date_created
-        AND h2.is_verify = '1'
-    ) AS pertemuan,
-    h.id_kehadiran,
-    j.id_dosen,
-    j.id_kelas,
-    j.id_mata_kuliah,
-    h.nim,
-    j.id_semester,
-    h.date_created
-FROM
-    tbl_kehadiran h
-JOIN
-    tbl_jadwal j
-ON
-    j.id_jadwal = h.id_jadwal
-WHERE
-    h.date_created IS NOT NULL
-    AND h.is_verify = '1'
-ORDER BY
-    j.id_mata_kuliah,
-    h.date_created,
-    h.nim;
+// v_pertemuan
+select (select count(0) from project_five.tbl_kehadiran h2 where ((j.id_jadwal = h2.id_jadwal) and (h2.date_created <= h.date_created) and (h2.is_verify = '1'))) AS pertemuan,h.id_kehadiran AS id_kehadiran,j.id_dosen AS id_dosen,j.id_kelas AS id_kelas,j.id_mata_kuliah AS id_mata_kuliah,h.nim AS nim,j.id_semester AS id_semester,h.date_created AS date_created from (project_five.tbl_kehadiran h join project_five.tbl_jadwal j on((j.id_jadwal = h.id_jadwal))) where ((h.date_created is not null) and (h.is_verify = '1')) order by j.id_mata_kuliah,h.date_created,h.nim
 
 
 
-
-SELECT v.*,a.hadir,a.izin,a.sakit,a.alfa,sum(a.hadir+a.izin+a.sakit+a.alfa) as jumlah_mahasiswa,vm.nama_lengkap,d.nama,k.kelas,s.semester,m.mata_kuliah
-FROM v_pertemuan v 
-, tbl_kehadiran a
-, v_mhs vm
-, tbl_pertemuan p 
-, tbl_mst_dosen d 
-, tbl_mst_kelas k
-, tbl_mst_semester s 
-, tbl_mst_mata_kuliah m
-where p.id_pertemuan=v.pertemuan
-and d.id_dosen=v.id_dosen
-and vm.nim=v.nim
-and k.id_kelas=v.id_kelas
-and m.id_mata_kuliah=v.id_mata_kuliah
-and s.id_semester=v.id_semester
-and a.id_kehadiran=v.id_kehadiran
-and v.pertemuan ='1'
-GROUP BY v.id_kehadiran,vm.nama_lengkap;
+// v_per_pertemuan
+select v.pertemuan AS pertemuan,v.id_kehadiran AS id_kehadiran,v.id_dosen AS id_dosen,v.id_kelas AS id_kelas,v.id_mata_kuliah AS id_mata_kuliah,v.nim AS nim,v.id_semester AS id_semester,v.date_created AS date_created,a.hadir AS hadir,a.izin AS izin,a.sakit AS sakit,a.alfa AS alfa,sum((((a.hadir + a.izin) + a.sakit) + a.alfa)) AS jumlah_mahasiswa,vm.nama_lengkap AS nama_lengkap,d.nama AS nama,k.kelas AS kelas,s.semester AS semester,m.mata_kuliah AS mata_kuliah from (((((((project_five.v_pertemuan v join project_five.tbl_kehadiran a) join project_five.v_mhs vm) join project_five.tbl_pertemuan p) join project_five.tbl_mst_dosen d) join project_five.tbl_mst_kelas k) join project_five.tbl_mst_semester s) join project_five.tbl_mst_mata_kuliah m) where ((p.id_pertemuan = v.pertemuan) and (d.id_dosen = v.id_dosen) and (vm.nim = v.nim) and (k.id_kelas = v.id_kelas) and (m.id_mata_kuliah = v.id_mata_kuliah) and (s.id_semester = v.id_semester) and (a.id_kehadiran = v.id_kehadiran)) group by v.id_kehadiran,vm.nama_lengkap
